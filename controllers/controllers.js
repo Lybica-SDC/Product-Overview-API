@@ -10,8 +10,8 @@ const getAll = async (req, res) => {
 
 const getProduct = async (req, res) => {
   // const { id } = req.params;
-  const product = await Product.findById(req.params.productId).lean().exec();
-  const features = await Feature.find({ productId: req.params.productId });
+  const product = await Product.findById(req.params.productId).populate('features').lean().exec();
+
 
   if (!product) {
     return res.status(404).json({error: 'No Product Found'})
@@ -20,7 +20,7 @@ const getProduct = async (req, res) => {
 };
 
 const getStyles = async (req, res) => {
-  const styles = await Style.find({ productId: req.params.productId }).exec();
+  const styles = await Style.find({ productId: req.params.productId }).populate('photos').populate('skus').exec();
 
   if (!styles) {
     return res.status(404).json({ error: 'styles not found' });

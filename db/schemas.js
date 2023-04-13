@@ -8,6 +8,15 @@ const productSchema = new Schema({
     description: String,
     category: String,
     default_price: Number
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+});
+
+productSchema.virtual('features', {
+  ref: 'Feature',
+  localField: '_id',
+  foreignField: 'product_id',
 });
 
 const featuresSchema = new Schema({
@@ -43,6 +52,21 @@ const stylesSchema = new Schema({
   sale_price: Number,
   original_price: Number,
   default_style: Boolean
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+});
+
+stylesSchema.virtual('photos', {
+  ref: 'Photo',
+  localField: '_id',
+  foreignField: 'styleId',
+});
+
+stylesSchema.virtual('skus', {
+  ref: 'Sku',
+  localField: '_id',
+  foreignField: 'styleId',
 });
 
 const Product = mongoose.model('Product', productSchema, 'products');

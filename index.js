@@ -2,8 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const mongoose = require('mongoose');
 const routes = require('./routes/routes.js');
-const db = require('./db/index.js');
+// const db = require('./db/index.js');
 
 
 const path = require('path');
@@ -14,10 +15,16 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use(routes);
+app.use('/products', routes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Web server running on: http://localhost:${PORT}`);
-});
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`connected to db Web server running on: http://localhost:${PORT}`);
+    })
+  })
+  .catch((error) => {
+    console.log(error)
+  });

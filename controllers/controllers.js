@@ -1,23 +1,46 @@
 const express = require('express');
-const models = require('../models/models.js');
+const { Product, Feature, Photo, Related, Sku, Style } = require('../db/schemas.js');
 
 
-const get = (req, res) => {
-  models.get().then(data => res.status(200).send(data)).catch(err => res.status(500).send(err))
+const getAll = async (req, res) => {
+  const products = await Product.find({}).limit(10).sort({ _id: 'asc' }).exec();
+
+  res.status(200).json(products)
 };
 
-const getProduct = (req, res) => {
-  models.getProduct().then(data => res.status(200).send(data)).catch(err => res.status(500).send(err))
+const getProduct = async (req, res) => {
+  // const { id } = req.params;
+  const product = await Product.findById(req.params.productId).exec();
+  const features = await Feature.find({ productId: req.params.productId });
+
+  if (!product) {
+    return res.status(404).json({error: 'No Product Found'})
+  }
+  res.status(200).json(product)
 };
 
-const getStyles = (req, res) => {
-  models.getStyles().then(data => res.status(200).send(data)).catch(err => res.status(500).send(err))
+const getStyles = async (req, res) => {
+  const styles = await Style.find({ productId: req.params.productId }).exec();
+
+  if (!styles) {
+    return res.status(404).json({ error: 'styles not found' });
+  }
+
+  res.status(200).json({
+    product_id: req.params.productId,
+    results: styles,
+  }
+  )
 };
 
-const getRelated = (req, res) => {
-  models.getRelated().then(data => res.status(200).send(data)).catch(err => res.status(500).send(err))
+const getRelated = async (req, res) => {
+  const related = await Related.find({ current_product_id: req.params.productId }).exec();
+  if (!related) {
+    return res.status(404).json({ error: 'related not found' })
+  }
+  res.status(200).json(related)
 };
 
 
-module.exports = {get, getProduct, getStyles, getRelated};
+module.exports = {getAll, getProduct, getStyles, getRelated};
 

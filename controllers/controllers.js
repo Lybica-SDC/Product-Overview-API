@@ -10,7 +10,7 @@ const getAll = async (req, res) => {
 
 const getProduct = async (req, res) => {
   // const { id } = req.params;
-  const product = await Product.findById(req.params.productId).exec();
+  const product = await Product.findById(req.params.productId).lean().exec();
   const features = await Feature.find({ productId: req.params.productId });
 
   if (!product) {
@@ -34,7 +34,7 @@ const getStyles = async (req, res) => {
 };
 
 const getRelated = async (req, res) => {
-  const related = await Related.find({ current_product_id: req.params.productId }).exec();
+  const related = await Related.find({ current_product_id: req.params.productId }, 'related_product_id').exec();
   if (!related) {
     return res.status(404).json({ error: 'related not found' })
   }

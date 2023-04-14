@@ -4,7 +4,8 @@
   "description": "This repo is for the System Design Capstone work completed by Donn Neufeld",
   "main": "index.js",
   "scripts": {
-    "dev-start": "npx nodemon index.js"
+    "dev-start": "npx nodemon index.js",
+    "newrelic": "node -r newrelic index.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongoose": "^7.0.3"
+    "mongoose": "^7.0.3",
+    "newrelic": "^9.15.0"
   },
   "devDependencies": {
     "eslint": "^8.37.0",

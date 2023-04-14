@@ -8,7 +8,7 @@ const get = () => {
   return db.findOne().exec();
 };
 
-const getProduct = (req) => {
+const getProduct = () => {
   const product_id = req.params.product_id;
    return Product.findOne({ _id: `${product_id}`});
 }
